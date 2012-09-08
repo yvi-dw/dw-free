@@ -18,6 +18,15 @@ use strict;
 
 mark_clustered(@LJ::USER_TABLES);
 
+register_tablecreate("usernotes", <<'EOC');
+CREATE TABLE usernotes (
+    userid int(10) unsigned NOT NULL default '0',
+    note_userid int(10) unsigned NOT NULL default '0',
+    note varchar(255),
+    PRIMARY KEY (userid, note_userid)
+)
+EOC
+
 register_tablecreate("vgift_ids", <<'EOC');
 CREATE TABLE vgift_ids (
     vgiftid      INT UNSIGNED NOT NULL PRIMARY KEY,

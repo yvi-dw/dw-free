@@ -155,6 +155,8 @@ body<=
     # get currently logged in user
     my $remote = LJ::get_remote();
 
+    my %usernotes = $remote->get_all_notes();
+
     #
     # Lots of logic to determine permissions for what can be viewed
     #
@@ -554,8 +556,13 @@ body<=
 
                 }
                 $ret .= "<br />$user\n";
+
+                # note
+                my $usernote = $usernotes{$pu->userid};
+                $ret .= "- <span class='usernote edit editable_textarea usernote_" . $pu->userid . "' userid='" . $pu->userid . "'>" . $usernote . "</span>\n" if $usernote;
+
                 $ret .= " " . BML::ml( '.from_external', {site=>$post->{props}->{imported_from}} ) if $post->{props}->{imported_from};
-                $ret .= "<br /><span class='datepost'>$datepost</span>\n";
+                $ret .= "<br /><span class='datepost edit'>$datepost</span>\n";
                 if ( $post->{'props'}->{'poster_ip'} && $remote &&
                      ( $viewall || $remote->equals( $up ) ||
                        $remote->can_manage( $u ) ) ) {

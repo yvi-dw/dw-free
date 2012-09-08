@@ -202,6 +202,30 @@ _renderPopup: function() {
         $content.append($membership, "<br />"   );
     }
 
+    // show user note
+    if  ( data.is_logged_in ) {
+        if ( data.usernote || data.can_add_usernote ) {
+            var $usernote = $("<span class='usernote edit editable_textarea usernote_" + data.userid + "'></span>");
+            $usernote.attr("userid", data.userid);
+            if ( data.usernote ) {
+                $usernote.html(data.usernote);
+            } else {
+                if  ( data.can_add_usernote ) {
+                    $usernote.html("No note defined");
+                }
+            }
+            $content.append($usernote, "<br />"   );
+            if ( data.can_add_usernote ) {
+                if ( opts.disableAJAX ) {
+                    $usernote.click(function(e) {
+                        window.location = data.url_usernote;
+                    });
+                } else {
+                }
+            }
+        }
+    }
+
     var links = [];
     if ( data.is_logged_in && ( data.is_person || data.is_identity ) && data.can_message ) {
         var $sendmessage = $("<a></a>", { href: data.url_message }).html("Send message");

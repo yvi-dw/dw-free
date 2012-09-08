@@ -56,6 +56,8 @@ body<=
         my @all_circle_userids = ( keys %$trust_list, keys %$watch_list, @trusted_by_userids, @watched_by_userids, @member_of_userids );
         my $us = LJ::load_userids( @all_circle_userids );
 
+        my %usernotes = $u->get_all_notes();
+
         $ret .= "<form method='post' name='editFriends' action='edit$getextra'>\n";
         $ret .= LJ::form_auth();
         $ret .= "<p>" . BML::ml( '.circle.intro', { aopts1 => "href='#editpeople'", aopts2 => "href='#editcomms'", aopts3 => "href='#editfeeds'", aopts4 => "href='$LJ::SITEROOT/manage/settings/?cat=notifications'" }) . "</p>\n\n";
@@ -110,6 +112,12 @@ body<=
                     $ret .= LJ::html_hidden( "editfriend_edit_${uid}_user" => 1 );
                     $ret .= $other_u->ljuser_display;
                     $ret .= "<br /><span style='font-size: smaller;'>" . $other_u->last_updated . "</span>";
+
+                    # note
+                    if ( $usernotes{$other_u->userid} ) {
+                        $ret .= "<br /><span class='usernote'>$ML{'.note'}: " . $usernotes{$other_u->userid} . "</span>";
+                    }
+
                     $ret .= "</td>";
 
                     # color

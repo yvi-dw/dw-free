@@ -1,0 +1,22 @@
+; -*- coding: utf-8 -*-
+.delete=Delete
+
+.more=More
+
+.new=New Note
+
+.new.note=Enter note
+
+.new.username=Enter username
+
+.note=Note
+
+.notes=Your notes
+
+.save=Save Changes
+
+.success=Your changes have been saved
+
+.title=Manage Your Notes
+
+.username=Username

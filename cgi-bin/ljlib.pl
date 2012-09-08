@@ -1118,6 +1118,8 @@ sub start_request
 
                     js/jquery.hoverIntent.js
                     js/jquery.contextualhover.js
+                    js/jquery.notes.js
+                    js/jquery/jquery.jeditable.js
                     stc/contextualhover.css
                 ));
         }

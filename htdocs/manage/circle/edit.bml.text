@@ -117,6 +117,8 @@
 
 .name=Name
 
+.note=Note
+
 .success.editfriends=Manage your Circle
 
 .success.editaccess_filters=Manage your access filters

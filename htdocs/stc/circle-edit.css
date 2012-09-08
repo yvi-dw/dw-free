@@ -31,3 +31,7 @@
 .editfriendsframe table, .editfriendsframe caption {
     margin: 0 auto;
 }
+
+.usernote {
+    font-size: smaller;
+}

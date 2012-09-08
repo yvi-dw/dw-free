@@ -111,6 +111,14 @@ _c?>
         $ret{self_is_identity} = $remote->is_identity;
         $ret{can_message} = $u->can_receive_message( $remote );
         $ret{url_message} = $u->message_url;
+        $ret{userid} = $u->userid;
+        if ( LJ::is_enabled( 'notes' ) ) {
+            $ret{usernote} = $remote->get_note( $u->userid );
+            if ( $remote->get_cap( 'notes' ) ) {
+                $ret{can_add_usernote} = 1;
+                $ret{url_usernote}  = "$LJ::SITEROOT/manage/notes";
+            }
+        }
     }
 
     $ret{is_logged_in}  = $remote ? 1 : 0;

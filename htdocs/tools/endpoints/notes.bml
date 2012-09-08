@@ -1,0 +1,39 @@
+<?_c
+#
+# /tools/endpoints/notes.bml
+#
+# Changes or creates a note
+#
+# Authors:
+#      Yvi <yvi.dreamwidth@gmail.com>
+#
+# Copyright (c) 2011 by Dreamwidth Studios, LLC.
+#
+# This program is free software; you may redistribute it and/or modify it under
+# the same terms as Perl itself. For a copy of the license, please reference
+# 'perldoc perlartistic' or 'perldoc perlgpl'.
+#
+_c?>
+<?_code # -*-bml-*-
+{
+    use strict;
+    use vars qw(%POST %GET);
+
+    my $ret = {};
+
+    my $remote = LJ::get_remote();
+    my $username = $POST{username};
+    my $note = $POST{note};
+
+    my $userid =  $POST{userid} ? $POST{userid} : LJ::get_userid( $username );
+
+    if ( $note ) {
+        return $note if $remote->set_note( $userid, $note );
+    } else {
+        $remote->delete_note( $userid );
+        return "No note defined";
+    }
+}
+
+_code?>
+

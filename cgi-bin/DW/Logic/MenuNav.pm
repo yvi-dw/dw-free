@@ -57,6 +57,7 @@ sub get_menu_navigation {
     my $loggedin_hasnetwork = ( $loggedin && $u->can_use_network_page ) ? 1 : 0;
     my $loggedin_ispaid = ( $loggedin && $u->is_paid ) ? 1 : 0;
     my $loggedin_popsubscriptions = ( $loggedin && $u->can_use_popsubscriptions );
+    my $loggedin_notes = ( $loggedin && $u->get_cap( 'notes' ) );
     my $loggedin_person = ( $loggedin && $u->is_person ) ? 1 : 0;
     my $loggedout = $loggedin ? 0 : 1;
     my $always = 1;
@@ -126,6 +127,11 @@ sub get_menu_navigation {
                     url => "$LJ::SITEROOT/manage/tags",
                     text => "menunav.organize.managetags",
                     display => $loggedin_hasjournal,
+                },
+                {
+                    url => "$LJ::SITEROOT/manage/notes",
+                    text => "menunav.organize.managenotes",
+                    display => $loggedin_notes,
                 },
                 {
                     url => "$LJ::SITEROOT/community/manage",

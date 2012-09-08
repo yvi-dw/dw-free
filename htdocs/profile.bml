@@ -396,6 +396,15 @@ body<=
                           style => 'vertical-align: middle; border: 0;' } );
         $ret .= "</a>\n";
     }
+
+    # usernote, if one is set
+    if ( $remote ) {
+        my $usernote = $remote->get_note( $u->userid );
+        if ( $usernote ) {
+            $ret .= " - <span class='usernote'>" . $usernote . " </span>";
+        }
+    }
+
     $ret .= q{ </div> };
 
 ################################################################################

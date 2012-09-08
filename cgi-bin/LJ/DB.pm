@@ -46,7 +46,7 @@ $LJ::DBIRole = new DBI::Role {
                     "ratelog", "loginstall", "sessions", "sessions_data",
                     "modlog", "modblob", "userproplite2", "links",
                     "userblob", "userpropblob",
-                    "clustertrack2", "reluser2",
+                    "clustertrack2", "reluser2", "user_notes",
                     "tempanonips", "inviterecv", "invitesent",
                     "memorable2", "memkeyword2", "userkeywords",
                     "trust_groups", "userpicmap2", "userpic2",

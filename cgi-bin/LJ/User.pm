@@ -3291,6 +3291,7 @@ sub id {
 sub ljuser_display {
     my ( $u, $opts ) = @_;
 
+    my $remote = LJ::get_remote();
     return LJ::ljuser( $u, $opts ) unless $u->is_identity;
 
     my $id = $u->identity;
@@ -3308,7 +3309,7 @@ sub ljuser_display {
     my $journal_url = $opts->{journal_url} || '';
     my $display_class = $opts->{no_ljuser_class} ? "" : " class='ljuser'";
     my $type = $u->journaltype_readable;
-
+    my $displayusernotesign = $remote && $opts->{usernotesign};
     my ($url, $name);
 
     if ($id->typeid eq 'O') {
@@ -3340,11 +3341,12 @@ sub ljuser_display {
         my $profile = $profile_url ne '' ? $profile_url :
             "$LJ::SITEROOT/profile?userid=" . $u->userid . "&amp;t=I$andfull";
 
+        my $usernote = ( $displayusernotesign && $remote->get_note( $u->userid ) ) ?  "<span class='usernote-sign'>*</span>" : "";
         my $lj_user = $opts->{no_ljuser_class} ? "" : " lj:user='$name'";
         return "<span$lj_user style='white-space: nowrap;$strike'$display_class><a href='$profile'>" .
             "<img src='$imgurl' alt='[$type profile] ' width='$width' height='$height'" .
             " style='vertical-align: text-bottom; border: 0; padding-right: 1px;' /></a>" .
-            "<a href='$url' rel='nofollow'><b>$name</b></a></span>";
+            "<a href='$url' rel='nofollow'><b>$name</b></a></span>$usernote";
 
     } else {
         return "<b>????</b>";
@@ -8400,7 +8402,9 @@ sub ljuser
     my $profile_url = $opts->{'profile_url'} || '';
     my $journal_url = $opts->{'journal_url'} || '';
     my $display_class = $opts->{no_ljuser_class} ? "" : " class='ljuser'";
+    my $remote = LJ::get_remote();
     my $profile;
+    my $u = isu( $user ) ? $user : LJ::load_user( $user );
 
     my $make_tag = sub {
         my ($fil, $url, $x, $y, $type) = @_;
@@ -8422,14 +8426,13 @@ sub ljuser
 
         $profile = $profile_url ne '' ? $profile_url : $profile . $andfull;
         $url = $journal_url ne '' ? $journal_url : $url;
+        my $usernote = ( $remote && $opts->{usernote} && $remote->get_note( $u->userid ) ) ?  "<span class='usernote-sign'>*</span>" : "";
 
         return "<span$lj_user style='white-space: nowrap;$strike'$display_class>" .
             "<a href='$profile'><img src='$img/$fil' alt='[$alttext] ' width='$x' height='$y'" .
             " style='vertical-align: text-bottom; border: 0; padding-right: 1px;' /></a>" .
-            "<a href='$url'$link_color>$ljusername</a></span>";
+            "<a href='$url'$link_color>$ljusername</a></span>$usernote";
     };
-
-    my $u = isu($user) ? $user : LJ::load_user($user);
 
     # Traverse the renames to the final journal
     if ($u && !$opts->{'no_follow'}) {

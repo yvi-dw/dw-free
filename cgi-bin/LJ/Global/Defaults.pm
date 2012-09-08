@@ -277,6 +277,7 @@ no strict "vars";
                        extacct_auth   => "tools/endpoints/extacct_auth.bml",
                        contentfilters => "tools/endpoints/contentfilters.bml",
                        general        => "tools/endpoints/general.bml",
+                       notes          => "tools/endpoints/notes.bml",
                        );
 
     foreach my $src (keys %ajaxmapping) {
@@ -353,6 +354,7 @@ no strict "vars";
         "js/jquery/jquery.ui.selectable.js" => "js/jquery/jquery.ui.selectable.min.js",
         "js/jquery/jquery.ui.sortable.js"   => "js/jquery/jquery.ui.sortable.min.js",
         "js/jquery/jquery.ui.widget.js"     => "js/jquery/jquery.ui.widget.min.js",
+        "js/jquery/jquery.editable.js"     => "js/jquery/jquery.editable.min.js",
 
         "js/hoverIntent.js"             => "js/hoverIntent.minified.js",
         "js/tooltip.js"                 => "js/tooltip.min.js",

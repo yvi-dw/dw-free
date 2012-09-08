@@ -1,0 +1,39 @@
+[%# notes.tt
+
+Page that shows notes and allows the user to manage their notes
+
+Authors:
+    Yvi <yvi.dreamwidth@gmail.com>
+
+This program is free software; you may redistribute it and/or modify it under
+the same terms as Perl itself.  For a copy of the license, please reference
+'perldoc perlartistic' or 'perldoc perlgpl'.
+%]
+
+[%- sections.title = '.title' | ml -%]
+
+[%- dw.need_res( { group => 'jquery' }, 'js/jquery.notes.js' ) -%]
+[%- CALL dw.active_resource_group( 'jquery' ) -%]
+
+[%- IF saved -%]
+    <p><h2>[% '.success' | ml %]</h2></p>
+[%- END -%]
+<h2>[% '.new' | ml %]</h2>
+<form method='post' action='notes'>
+<div id='newnotes'><input type="text" id="username_1" name="username_1" class='enterusername' value='[% ".new.username" | ml %]' size="20" />  <input type="text" class='enternote' id="note_1" name="note_1" value='[% ".new.note" | ml %]' size="50" maxlength="256" />&nbsp;</div>
+<br /><br />
+<input type='button' class='morenotes' value='[% ".more" | ml %]' />  <input type='submit' value='[% ".save" | ml %]' />
+<br />
+<p><h2>[% '.notes' | ml %]</h2>
+<table>
+<tr><th>[% ".delete" | ml %]</th><th>[% ".username" | ml %]</th><th>[% ".note" | ml %]</th></tr>
+[% FOREACH notespair IN userstonotes %]
+    [% username = notespair.key %]
+    <tr><td><input type="checkbox" name="delete_[% username %]"/></td>  
+    <td>[% userstodisplay.$username %]</td>
+    <td><input type="text" class ="usernote_[% userids.$username %]" name="note_[% username %]" value='[% notespair.value %]' size="25" maxlength="256" /></td></tr>
+[% END %]
+</table>
+</p>
+<input type='submit' value='[% ".save" | ml %]' />
+</form>

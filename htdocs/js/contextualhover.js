@@ -355,6 +355,16 @@ ContextualPopup.renderPopup = function (ctxPopupId) {
             content.appendChild(membership);
         }
 
+        // show user note
+        var usernote;
+        if ( data.is_logged_in && data.usernote ) {
+            usernote = document.createElement("a");
+            usernote.href = data.url_usernote;
+            usernote.innerHTML = data.usernote;
+            content.appendChild(usernote);
+            content.appendChild(document.createElement("br"));
+        }
+        
         // send message
         var message;
         if ( data.is_logged_in && ( data.is_person || data.is_identity ) && data.can_message ) {
