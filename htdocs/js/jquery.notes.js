@@ -12,7 +12,7 @@ jQuery(function($) {
     });
 
     var id = 1;
-    $(".morenotes").live("click", function(event) {
+    $("#notesform").delegate(".morenotes", "click", function(event) {
         var newid = id+1;
         $("#newnotes").append("<br />");
         $("#username_" + id).clone().appendTo("#newnotes")
@@ -37,7 +37,7 @@ jQuery(function($) {
     $(".edit").live("hover", function(e) {
         $(this).editable(editurl, {
             cancel    : 'Cancel',
-            submit    : 'OK',
+            submit    : 'Save',
             width     : '10em',
             name      : 'note',
             submitdata: function (value, settings) {

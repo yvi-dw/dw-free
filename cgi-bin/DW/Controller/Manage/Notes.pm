@@ -35,8 +35,8 @@ sub notes_handler {
     my $remote = LJ::get_remote();
     my %notes = $remote->get_all_notes;
 
-    if ( LJ::did_post() ) {
-	    my $args = DW::Request->get->post_args;
+    if ( $r->did_post ) {
+	    my $args = $r->post_args;
 
         # set the new notes
         my $id = 1;
@@ -52,7 +52,6 @@ sub notes_handler {
                 my $note = $args->{$inputnote};
                 next unless $note && $notes_userid;
                 $notes_to_set{$notes_userid} = $note;
-                #$notes{$notes_userid} = $note;
             }
             $id++;
             $inputname = "username_" . $id;
@@ -66,8 +65,6 @@ sub notes_handler {
             my $notestring = "note_" . $note_username;
             if ( $args->{$notestring} &&  ( $args->{$notestring} ne $notes{$userid} ) ) {
                 $notes_to_set{$userid} = $args->{$notestring};
-                # my $newnote = $remote->set_note( $userid, $args->{$notestring} );
-                # $notes{$userid} = $newnote if $newnote;
             } 
 
             unless ( $args->{$notestring} ) {
@@ -78,7 +75,6 @@ sub notes_handler {
 	        my $delstring = "delete_" . $note_username;
     	    if ( $args->{$delstring} ) {
 	    	    push @notes_to_delete, $userid;
-                #delete $notes{$userid};
             }
 	    }
 
@@ -88,29 +84,25 @@ sub notes_handler {
 	    $rv->{saved} = 1;
     }
 
-    # hash: username -> [note]
-    my %display_notes;
-    # hash: username -> [display]
-    my %display_users;
-    # hash: username -> [userid]
-    my %userids;
-
     if ( %notes ) {
+        my @notes_det;
+        my $us = LJ::load_userids( keys %notes );
 	    # convert for display
 	    for my $uid ( keys %notes ) {
-	        my $display_u = LJ::load_userid( $uid );
+	        my $display_u = $us->{$uid};
             next unless $display_u;
             my $username = $display_u->username;
-	        $display_notes{$username} = $notes{$uid};
-	        $display_users{$username} = $display_u->ljuser_display;
-            $userids{$username} = $uid;
-	    }
 
+            push @notes_det,
+            { 
+                username => $display_u->username, 
+                usertag => $display_u->ljuser_display,
+                note => $notes{$uid}
+            };
+        }
+
+        $rv->{notes} = \@notes_det;
     }
-
-    $rv->{userstonotes} = \%display_notes;
-    $rv->{userstodisplay} = \%display_users;
-    $rv->{userids} = \%userids;
 
     return DW::Template->render_template( 'manage/notes.tt', $rv );
 }
