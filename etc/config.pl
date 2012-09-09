@@ -71,7 +71,7 @@
     #             );
 
     # require new free acounts to be referred by an existing user?
-    $USE_ACCT_CODES = 0;
+    $USE_ACCT_CODES = 1;
 
     #$EVERYONE_VALID = 1; # are all users validated by default?
 
@@ -152,7 +152,6 @@
                  importing => 0,
                  'interests-findsim' => 0,
                  memories => 0,
-                 notes => 0, 
                  opt_findbyemail => 1,
                  payments => 0,
                  'show-talkleft' => 0,
@@ -359,7 +358,6 @@
             'mod_queue' => 50,
             'mod_queue_per_poster' => 3,
             'moodthemecreate' => 0,
-            notes => 1,
             popsubscriptions => 0,
             's2layersmax' => 0,
             's2props' => 0,
@@ -418,7 +416,6 @@
             'mod_queue' => 100,
             'mod_queue_per_poster' => 5,
             'moodthemecreate' => 1,
-            notes => 1,
             popsubscriptions => 1,
             's2layersmax' => 150,
             's2props' => 1,
@@ -475,7 +472,6 @@
             'mod_queue' => 100,
             'mod_queue_per_poster' => 5,
             'moodthemecreate' => 1,
-            notes => 1,
             popsubscriptions => 1,
             's2layersmax' => 300,
             's2props' => 1,
@@ -539,7 +535,6 @@
             'mod_queue' => 100,
             'mod_queue_per_poster' => 5,
             'moodthemecreate' => 1,
-            notes => 1,
             popsubscriptions => 1,
             's2layersmax' => 300,
             's2props' => 1,
@@ -595,7 +590,6 @@
             'mod_queue' => 100,
             'mod_queue_per_poster' => 5,
             'moodthemecreate' => 1,
-            notes => 1,
             popsubscriptions => 1,
             's2layersmax' => 300,
             's2props' => 1,
