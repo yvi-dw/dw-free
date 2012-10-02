@@ -279,8 +279,5 @@ sub raw_info {
     return $res;
 }
 
-sub related_events {
-    return map { $_->etypeid } ( $_[0], "LJ::Event::UserMessageRecvd::Community" );
-}
 
 1;
