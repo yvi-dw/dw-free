@@ -410,15 +410,17 @@ body<=
                 $ret .= "</td></tr>\n";
             }
 
-            # opt_usermsg
-            if ( LJ::is_enabled( 'user_messaging' ) ) {
-                $ret .= "<tr class='field_block" . $zebra_row->() . "'><td class='field_name'>";
-                $ret .= BML::ml( 'setting.usermessaging.label', { siteabbrev => $LJ::SITENAMEABBREV } );
-                $ret .= "</td><td><span class='helper'>";
-                $ret .= BML::ml( 'settings.usermessaging.obsolete' );
-                $ret .= "</span></td>\n<td class='selectvis'>";
-                $ret .= "</td></tr>\n";
-            }
+        } # end is_person check
+
+        # opt_usermsg
+        if ( ( $u->is_person || $u->is_community ) && LJ::is_enabled( 'user_messaging' ) ) {
+            $ret .= "<tr class='field_block" . $zebra_row->() . "'><td class='field_name'>";
+            $ret .= BML::ml( 'setting.usermessaging.label', { siteabbrev => $LJ::SITENAMEABBREV } );
+            $ret .= "</td><td><span class='helper'>";
+            $ret .= BML::ml( 'settings.usermessaging.obsolete' );
+            $ret .= "</span></td>\n<td class='selectvis'>";
+            $ret .= "</td></tr>\n";
+        }
 
         } # end is_person check
 

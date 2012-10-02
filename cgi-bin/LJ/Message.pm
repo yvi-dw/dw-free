@@ -360,13 +360,25 @@ sub set_singleton {
 
 # Can user reply to this message
 # Return true if user received a matching message with type 'in'
+# or if the logged in user can manage the user sending this message and that user received a matching message
 sub can_reply {
-    my ($self, $msgid, $remote_id) = @_;
+    my ($self, $msgid, $remote_id, $user_id) = @_;
 
     if ($self->journalid == $remote_id &&
         $self->msgid == $msgid &&
         $self->type eq 'in') {
         return 1;
+    }
+
+    if ( $user_id ) {
+        my $u = LJ::load_userid( $user_id );
+        my $remote = LJ::load_userid( $remote_id );
+        if ($self->journalid == $user_id &&
+            $remote->can_manage ( $u ) &&
+            $self->msgid == $msgid &&
+            $self->type eq 'in') {
+            return 1;
+        }
     }
 
     return 0;
@@ -382,9 +394,9 @@ sub can_send {
     my $ou = $self->_orig_u;
     my $ru = $self->_rcpt_u;
 
-    # Can only send to other individual users
-    unless ($ru->is_person || $ru->is_identity) {
-        push @$errors, BML::ml('error.message.individual', { 'ljuser' => $ru->ljuser_display });
+    # Can not send messages to feed accounts
+    if ( $ru->is_syndicated ) {
+        push @$errors, BML::ml('error.message.accounttype', { 'ljuser' => $ru->ljuser_display });
         return 0;
     }
 

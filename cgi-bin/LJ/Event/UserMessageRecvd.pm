@@ -50,7 +50,7 @@ sub _as_email {
 
     my $lang        = $u->prop('browselang');
     my $msg         = $self->load_message;
-    my $replyurl    = "$LJ::SITEROOT/inbox/compose?mode=reply&msgid=" . $msg->msgid;
+    my $replyurl    = "$LJ::SITEROOT/inbox/compose?mode=reply&msgid=" . $msg->msgid . "&user=" . $u->userid;
     my $other_u     = $msg->other_u;
     my $sender      = $other_u->user;
     my $inbox       = "$LJ::SITEROOT/inbox/";
@@ -73,7 +73,7 @@ sub _as_email {
             'esn.reply_to_message' => [ 1, $replyurl ],
             'esn.view_profile'     => [ 2, $other_u->profile_url ],
             'esn.read_journal'     => [ $other_u->is_identity ? 0 : 3, $other_u->journal_base ],
-            'esn.add_watch'        => [ $u->watches( $other_u ) ? 0 : 4,
+            'esn.add_watch'        => [ $u->watches ( $other_u ) || $u->is_community   ? 0 : 4,
                                              "$LJ::SITEROOT/manage/circle/add?user=$sender&action=subscribe" ],
         }
     );
@@ -128,7 +128,7 @@ sub as_html_actions {
     my $u = LJ::want_user($msg->journalid);
 
     my $ret = "<div class='actions'>";
-    $ret .= " <a href='$LJ::SITEROOT/inbox/compose?mode=reply&msgid=$msgid'>Reply</a>";
+    $ret .= " <a href='$LJ::SITEROOT/inbox/compose?mode=reply&msgid=$msgid&user=" . $u->userid . "'>Reply</a>";
     $ret .= " | <a href='$LJ::SITEROOT/manage/circle/add?user=". $msg->other_u->user ."&action=subscribe'>Subscribe to ". $msg->other_u->user ."</a>"
         unless $u->watches( $msg->other_u );
     $ret .= " | <a href='$LJ::SITEROOT/inbox/markspam?msgid=". $msg->msgid ."'>Mark as Spam</a>"
@@ -277,6 +277,10 @@ sub raw_info {
     $res->{parent} = $msg->parent_msgid if $msg->parent_msgid;
 
     return $res;
+}
+
+sub related_events {
+    return map { $_->etypeid } ( $_[0], "LJ::Event::UserMessageRecvd::Community" );
 }
 
 1;

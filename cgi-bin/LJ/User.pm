@@ -6094,6 +6094,7 @@ sub can_receive_message {
     return 0 if $u->has_banned($sender);
     return 0 if $opt_usermsg eq 'M' && !$u->mutually_trusts($sender);
     return 0 if $opt_usermsg eq 'F' && !$u->trusts($sender);
+    return 0 if $opt_usermsg eq 'C' && !$sender->member_of( $u );
 
     return 1;
 }
@@ -6244,10 +6245,11 @@ sub notification_inbox {
 # F - Trusted Users
 # M - Mutually Trusted Users
 # N - Nobody
+# C - Community members
 sub opt_usermsg {
     my $u = shift;
 
-    if ($u->raw_prop('opt_usermsg') =~ /^(Y|F|M|N)$/) {
+    if ($u->raw_prop('opt_usermsg') =~ /^(Y|F|M|N|C)$/) {
         return $u->raw_prop('opt_usermsg');
     } else {
         return 'M' if $u->is_minor;

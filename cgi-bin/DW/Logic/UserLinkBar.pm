@@ -377,7 +377,7 @@ sub message {
     my $remote = $self->{remote};
     my $user = $u->user;
 
-    if ( $u->is_personal || $u->is_identity ) {
+    unless ( $u->is_syndicated ) {
         my $link = {
             text_ml => 'userlinkbar.sendmessage',
             title_ml => 'userlinkbar.sendmessage.title',

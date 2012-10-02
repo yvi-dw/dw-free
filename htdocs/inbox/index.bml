@@ -29,6 +29,9 @@ body<=
 
     return $ML{'.error.not_ready'} unless $remote->can_use_esn;
 
+    my $authas = $GET{'authas'} || $POST{'authas'} || $remote->{user};
+    my $u = LJ::get_authas_user( $authas );
+
     LJ::need_res(qw(
                   js/6alib/core.js
                   js/6alib/dom.js
@@ -46,8 +49,8 @@ body<=
     my $formauth = LJ::form_auth();
 
     # get the user's inbox
-    my $inbox = $remote->notification_inbox
-        or return LJ::error_list( BML::ml('.error.couldnt_retrieve_inbox', { 'user' => $remote->{user} }) );
+    my $inbox = $u->notification_inbox
+        or return LJ::error_list( BML::ml('.error.couldnt_retrieve_inbox', { 'user' => $u->{user} }) );
 
     # 2 instances of action buttons
     # map each to one variable
@@ -120,6 +123,12 @@ body<=
         }
     }
 
+    # user switcher for accessing community inboxes
+    $body .= "<div>";
+    $body .= "<form method='get' action='./'>\n";
+    $body .= LJ::make_authas_select($remote, { 'authas' => $GET{'authas'} });
+    $body .= "</form><p /></div>";
+
     # Allow bookmarking to work without Javascript
     # or before JS events are bound
     if ($GET{bookmark_off} && $GET{bookmark_off} =~ /^\d+$/) {
@@ -141,7 +150,7 @@ body<=
     # Inbox Nav
     $body .= qq{
         <table summary='' id="table_inbox" style="width: 100%"><tr><td id="table_inbox_folders" valign="top" style="padding-right: 12px">};
-    $body .= LJ::Widget::InboxFolderNav->render( 'page' => 1, 'view' => $view );
+    $body .= LJ::Widget::InboxFolderNav->render( $u, 'page' => 1, 'view' => $view );
 
     $body .= qq{
         </td>
@@ -265,6 +274,7 @@ if ($("pageNum")) pageNum = parseInt($("pageNum").value);
 function xtra_args () {
     var args = '';
     var view = $("inbox_view").value;
+    if (authas) args += "&authas=" + authas;
     if (view) args += "&view=" + view;
     if (itemid) args += "&itemid="+itemid;
     return args;

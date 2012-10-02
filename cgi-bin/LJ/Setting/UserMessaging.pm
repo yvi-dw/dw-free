@@ -18,7 +18,7 @@ use warnings;
 
 sub should_render {
     my ( $class, $u ) = @_;
-    return $u->is_person && LJ::is_enabled( 'user_messaging' );
+    return ( $u->is_person || $u->is_community ) && LJ::is_enabled( 'user_messaging' );
 }
 
 sub label {
@@ -34,11 +34,13 @@ sub option {
 
     my $usermsg = $class->get_arg($args, "usermsg") || $u->prop("opt_usermsg");
 
+    # TODO: split for comms and users (comm: Y, C, N; personal: Y, F, M, N)
     my @options = (
         "Y" => $class->ml( 'setting.usermessaging.opt.y' ),
         "F" => $class->ml( 'setting.usermessaging.opt.f' ),
         "M" => $class->ml( 'setting.usermessaging.opt.m' ),
         "N" => $class->ml( 'setting.usermessaging.opt.n' ),
+        "C" => $class->ml( 'setting.usermessaging.opt.c' ),
     );
 
     my $ret;
@@ -68,7 +70,7 @@ sub error_check {
     my $val= $class->get_arg($args, "usermsg");
 
     $class->errors( usermsg => $class->ml('setting.usermessaging.error.invalid'))
-        unless $val=~ /^[MFNY]$/;
+        unless $val=~ /^[MFNYC]$/;
 
     return 1;
 }

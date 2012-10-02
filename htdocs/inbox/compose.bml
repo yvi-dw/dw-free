@@ -27,6 +27,8 @@ body<=
 
     my $remote = LJ::get_remote() or return "<?needlogin?>";
     my $remote_id = $remote->{'userid'};
+    my $user_id = $GET{'user'};
+    my $owner_id = $user_id ? $user_id : $remote_id;
 
     return "<?p " . BML::ml('protocol.not_validated', { sitename => $LJ::SITENAMESHORT, siteroot => $LJ::SITEROOT }) . " p?>"
         unless $remote->is_validated;
@@ -114,8 +116,8 @@ body<=
                     next;
                 }
 
-                # Can only send to other individual users
-                unless ($tou->is_person || $tou->is_identity || $tou->is_renamed) {
+                # Cannot send messages to feed accounts
+                if ( $tou->is_syndicated ) {
                     push @errors, BML::ml( 'error.message.individual', { ljuser => $tou->ljuser_display } );
                     next;
                 }
@@ -133,7 +135,7 @@ body<=
                     next;
                 }
 
-                push @msg_list, LJ::Message->new({journalid => $remote_id,
+                push @msg_list, LJ::Message->new({journalid => $owner_id,
                                             otherid   => $tou->{userid},
                                             subject   => $msg_subject_text,
                                             body      => $msg_body_text,
@@ -187,9 +189,9 @@ body<=
         my $msgid = $GET{'msgid'} || $POST{'msgid'};
         next unless $msgid;
 
-        my $msg = LJ::Message->load({msgid => $msgid, journalid => $remote_id});
+        my $msg = LJ::Message->load({msgid => $msgid, journalid => $owner_id});
         push @errors, $ML{'.error.cannot.reply'}
-            unless ($msg->can_reply($msgid, $remote_id));
+            unless ($msg->can_reply($msgid, $remote_id, $user_id));
 
         if (@errors) {
             $body .= LJ::error_list(@errors);

@@ -884,13 +884,13 @@ error.mediauploadsdisabled=Media modifications are temporarily disabled at this 
 
 error.memorial.text=This journal is a memorial account. You cannot log in, post new entries, or edit existing ones.
 
+error.message.accounttype=Messages can be sent only to individual accounts and communities, not to [[ljuser]].
+
 error.message.canreceive=This message can't be sent to [[ljuser]] because the recipient has chosen not to receive messages.
 
 error.message.deleted=Your message can't be sent to [[ljuser]] because that account has been marked for deletion.
 
 error.message.expunged=This message can't be sent to [[ljuser]] because that account has been deleted.
-
-error.message.individual=Messages can be sent only to individual accounts, not [[ljuser]].
 
 error.message.unvalidated=This message can't be sent to [[ljuser]] because the recipient's email address hasn't been confirmed.
 
@@ -1530,6 +1530,8 @@ event.community_join_requst=Someone requests membership in a community I adminis
 
 event.comm_invite=I receive an invitation to join a community
 
+event.community_message=Someone sends a message to a community I maintain
+
 event.invited_friend_joins=Someone I invited creates a new journal
 
 event.journal_new_comment.friend=Someone comments in any journal on my friends page
@@ -1828,6 +1830,8 @@ inbox.menu.community_membership=Community Membership
 inbox.menu.encircled=New People
 
 inbox.menu.entries_and_comments=Entries and Comments
+
+inbox.menu.commmessages=Community Messages
 
 inbox.menu.messages=Messages
 
@@ -2928,6 +2932,8 @@ setting.usermessaging.error.invalid=Invalid selection.
 setting.usermessaging.label=[[siteabbrev]] Private Messages
 
 setting.usermessaging.opt.a=Everyone
+
+setting.usermessaging.opt.c=Community Members
 
 setting.usermessaging.opt.f=Access List Only
 
