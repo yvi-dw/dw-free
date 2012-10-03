@@ -1038,6 +1038,8 @@ esn.bday.subject=[[bdayuser]]'s birthday is coming up.
 
 esn.befriended.subject=[[who]] added you as a friend!
 
+esn.community.footer=This message was sent by [[senderuser]].
+
 esn.community_join_requst.email_text<<
 Hi [[maintainer]],
 

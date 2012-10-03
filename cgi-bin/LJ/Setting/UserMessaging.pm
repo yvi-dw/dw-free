@@ -34,14 +34,17 @@ sub option {
 
     my $usermsg = $class->get_arg($args, "usermsg") || $u->prop("opt_usermsg");
 
-    # TODO: split for comms and users (comm: Y, C, N; personal: Y, F, M, N)
     my @options = (
-        "Y" => $class->ml( 'setting.usermessaging.opt.y' ),
-        "F" => $class->ml( 'setting.usermessaging.opt.f' ),
-        "M" => $class->ml( 'setting.usermessaging.opt.m' ),
-        "N" => $class->ml( 'setting.usermessaging.opt.n' ),
-        "C" => $class->ml( 'setting.usermessaging.opt.c' ),
+        "Y" => $class->ml( 'setting.usermessaging.opt.y' )
     );
+
+    if ( $u->is_person ) {
+        push @options, "F" => $class->ml( 'setting.usermessaging.opt.f' );
+        push @options, "M" => $class->ml( 'setting.usermessaging.opt.m' );
+    } else {
+        push @options, "C" => $class->ml( 'setting.usermessaging.opt.c' );
+    }
+    push @options, "N" => $class->ml( 'setting.usermessaging.opt.n' );
 
     my $ret;
 

@@ -28,6 +28,8 @@ body<=
     my $remote = LJ::get_remote() or return "<?needlogin?>";
     my $remote_id = $remote->{'userid'};
     my $user_id = $GET{'user'};
+    my $send_as = $GET{'sendas'} ? $GET{'sendas'} : "";
+    my $send_as_u = $send_as ? LJ::load_user( $send_as ) : $remote;
     my $owner_id = $user_id ? $user_id : $remote_id;
 
     return "<?p " . BML::ml('protocol.not_validated', { sitename => $LJ::SITENAMESHORT, siteroot => $LJ::SITEROOT }) . " p?>"
@@ -73,6 +75,10 @@ body<=
                     subject_limit  => LJ::commafy( $subject_limit ),
                 } )
                 unless $subject_length_c <= $subject_limit;
+
+            # test for authorization to send from this account
+            push @errors, BML::ml( '.error.unauthorized', { ljuser => $send_as_u->ljuser_display } )
+                unless $remote->can_manage( $send_as_u );
 
             # test encoding and length
             my $msg_body_text = $POST{'msg_body'};
@@ -135,7 +141,8 @@ body<=
                     next;
                 }
 
-                push @msg_list, LJ::Message->new({journalid => $owner_id,
+                push @msg_list, LJ::Message->new({journalid => $send_as_u->userid,
+                                            senderid  => $owner_id,
                                             otherid   => $tou->{userid},
                                             subject   => $msg_subject_text,
                                             body      => $msg_body_text,
@@ -241,6 +248,11 @@ body<=
     $body .= $pic;
 
     $body .= "<div id='metainfo'>";
+
+    $body .= '<p class="pkg"><label class="left">' . $ML{'.message.from'} . '</label> ';
+    $body .= $send_as_u->ljuser_display;
+    $body .= "</p>\n";
+
     $body .= '<p class="pkg"><label class="left">To:</label> ';
 
     if ($disabled_to) {

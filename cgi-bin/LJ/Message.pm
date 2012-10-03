@@ -25,7 +25,7 @@ sub new {
     my $self = bless {};
 
     # fields
-    foreach my $f (qw(msgid journalid otherid subject body type parent_msgid
+    foreach my $f (qw(msgid journalid senderid otherid subject body type parent_msgid
                       timesent userpic)) {
         $self->{$f} = delete $opts->{$f} if exists $opts->{$f};
     }
@@ -41,6 +41,7 @@ sub new {
     }
 
     my $journalid = $self->{journalid} || undef;
+    my $sendasid =  $self->{sendasid} || undef;
     my $msgid = $self->{msgid} || undef;
 
     $self->set_singleton; # only gets set if msgid and journalid defined
@@ -62,6 +63,12 @@ sub send {
                 or croak("Unable to allocate global message id");
     $self->set_msgid($msgid);
     $self->set_timesent(time());
+
+    # send as community
+    if ( $self->{senderid} ne $self->{journalid} ) {
+        my $send_as_u = LJ::load_userid( $self->{journalid} );
+        $self->body .= BML::ml('esn.community.footer', { 'senderuser' => $send_as_u->ljuser_display })
+    }
 
     # Send message by writing to DB and triggering event
     if ($self->save_to_db) {
@@ -423,7 +430,6 @@ sub can_send {
         push @$errors, "This message will exceed your limit and cannot be sent.$up";
         return 0;
     }
-
     return 1;
 }
 

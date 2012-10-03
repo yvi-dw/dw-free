@@ -15,6 +15,8 @@
 
 .error.text.encoding.text=Invalid text encoding for message text
 
+.error.unauthorized=You are not authorized to send messages for user [[ljuser]].
+
 .form.label.cc=Send me a copy of my own message
 
 .link.home=Return Home
@@ -22,6 +24,8 @@
 .link.inbox=Return to Inbox
 
 .link.send.message=Send a new message
+
+.message.from=From:
 
 .message.sent=Your message has been sent successfully.
 

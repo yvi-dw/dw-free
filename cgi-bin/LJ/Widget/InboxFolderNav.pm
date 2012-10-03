@@ -71,8 +71,9 @@ sub render_body {
     my $alert_plural = $unread_count == 1 ? 'inbox.message' : 'inbox.messages';
     $alert_plural .= $unread_count ? '!' : '.';
     my $message_button = "";
+    my $send_as = $u->username;
     $message_button = qq{
-        <form action="./compose" method="GET">
+        <form action="./compose?as=$send_as" method="GET">
         <input type="submit" value="<?_ml inbox.menu.new_message.btn _ml?>" style="width: 100%">
         </form>} if LJ::is_enabled('user_messaging');
 
