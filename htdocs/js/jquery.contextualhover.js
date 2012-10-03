@@ -203,7 +203,7 @@ _renderPopup: function() {
     }
 
     var links = [];
-    if ( data.is_logged_in && ( data.is_person || data.is_identity ) && data.can_message ) {
+    if ( data.is_logged_in && ( data.is_person || data.is_identity || data.is_community ) && data.can_message ) {
         var $sendmessage = $("<a></a>", { href: data.url_message }).html("Send message");
         links.push($("<span></span>").append($sendmessage));
     }
